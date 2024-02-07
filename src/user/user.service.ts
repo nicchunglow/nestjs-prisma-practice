@@ -1,7 +1,7 @@
 import { User, Prisma } from '@prisma/client'
 import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { userSchema } from '../schemas/user.schema'
+import { userSchema } from './user.schema'
 
 @Injectable()
 export class UserService {
