@@ -4,7 +4,6 @@ import { User } from '@prisma/client'
 import { Test, TestingModule } from '@nestjs/testing'
 import { UserService } from './user.service'
 import { PrismaService } from '../../prisma.service'
-import { UnprocessableEntityException } from '@nestjs/common'
 
 describe('UserService', () => {
   let userService: UserService
@@ -48,21 +47,6 @@ describe('UserService', () => {
 
     await expect(userService.createUser(userData)).rejects.toThrow(
       'Email already exist'
-    )
-  })
-
-  it('should throw for invalid data', async () => {
-    const userData = {
-      name: '',
-      email: 'test@email.gov',
-      agency: 'ACRA',
-      description: 'I am a test officer',
-      acceptTerms: false,
-    }
-    jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(null)
-
-    await expect(userService.createUser(userData)).rejects.toThrow(
-      'name should be valid format'
     )
   })
 })

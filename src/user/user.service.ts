@@ -1,7 +1,6 @@
 import { User, Prisma } from '@prisma/client'
 import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { userSchema } from './user.schema'
 
 @Injectable()
 export class UserService {
@@ -9,8 +8,6 @@ export class UserService {
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     try {
-      await userSchema.validateAsync(data)
-
       const userEmail = await this.prisma.user.findFirst({
         where: { email: data.email },
         select: { email: true },
