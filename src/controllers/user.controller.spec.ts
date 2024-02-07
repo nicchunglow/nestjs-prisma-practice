@@ -20,14 +20,18 @@ describe('UserController', () => {
   describe('User', () => {
     describe('POST', () => {
       it('should create user', async () => {
-        const result = { id: 1, name: 'hi', email: 'hi@email.abc' }
+        const userData = {
+          name: 'TestUser',
+          email: 'test@email.gov',
+          agency: 'ACRA',
+          description: 'I am a test officer',
+          acceptTerms: true,
+        }
+        const result = { id: 1, ...userData }
 
         jest.spyOn(service, 'createUser').mockResolvedValue(result)
 
-        const response = await controller.createUser({
-          name: 'hi',
-          email: 'email',
-        })
+        const response = await controller.createUser(userData)
 
         expect(response).toEqual(result)
       })
