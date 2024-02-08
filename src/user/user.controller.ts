@@ -17,7 +17,7 @@ export class UserController {
     try {
       return this.userService.createUser(userData)
     } catch (err) {
-      throw err
+      throw new Error(err)
     }
   }
 }
