@@ -12,7 +12,7 @@ import { User } from 'src/user/user.type'
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('user')
+  @Post('users')
   async createUser(@Body() userData: User): Promise<UserModel> {
     try {
       return this.userService.createUser(userData)
