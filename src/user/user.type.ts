@@ -5,3 +5,8 @@ export type User = {
   description: string
   acceptTerms: boolean
 }
+
+export type LoginUser = {
+  email: string
+  password: string
+}

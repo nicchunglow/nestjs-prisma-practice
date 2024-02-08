@@ -1,5 +1,9 @@
 import { User, Prisma } from '@prisma/client'
-import { Injectable, UnprocessableEntityException } from '@nestjs/common'
+import {
+  Injectable,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
 import { userSchema } from './user.schema'
 
@@ -35,6 +39,21 @@ export class UserService {
       return this.prisma.user.create({
         data,
       })
+    } catch (err) {
+      throw err
+    }
+  }
+  async loginUser(data: Prisma.UserFindFirstArgs): Promise<User | null> {
+    try {
+      const user = await this.prisma.user.findFirst({
+        where: { email: data.where?.email },
+      })
+
+      if (!user) {
+        throw new UnauthorizedException('Login failed')
+      }
+
+      return user
     } catch (err) {
       throw err
     }
