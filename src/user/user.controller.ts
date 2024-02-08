@@ -1,8 +1,12 @@
-import { Controller, Post, Body } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  UnprocessableEntityException,
+} from '@nestjs/common'
 import { UserService } from './user.service'
 import { User as UserModel } from '@prisma/client'
 import { User } from 'src/user/user.type'
-import { userSchema } from './user.schema'
 
 @Controller()
 export class UserController {
@@ -11,10 +15,9 @@ export class UserController {
   @Post('user')
   async createUser(@Body() userData: User): Promise<UserModel> {
     try {
-      const validatedData = await userSchema.validateAsync(userData)
-      return this.userService.createUser(validatedData)
+      return this.userService.createUser(userData)
     } catch (err) {
-      throw new Error(err.message)
+      throw err
     }
   }
 }

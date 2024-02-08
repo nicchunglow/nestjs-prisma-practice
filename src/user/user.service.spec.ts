@@ -49,4 +49,19 @@ describe('UserService', () => {
       'Email already exist'
     )
   })
+
+  it('should throw for invalid data', async () => {
+    const userData = {
+      name: '',
+      email: 'test@email.gov',
+      agency: 'ACRA',
+      description: 'I am a test officer',
+      acceptTerms: false,
+    }
+    jest.spyOn(prismaService.user, 'findFirst').mockResolvedValue(null)
+
+    await expect(userService.createUser(userData)).rejects.toThrow(
+      'name should be valid format'
+    )
+  })
 })

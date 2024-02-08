@@ -1,33 +1,42 @@
 import { User, Prisma } from '@prisma/client'
 import { Injectable, UnprocessableEntityException } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
+import { userSchema } from './user.schema'
 
 @Injectable()
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
+  private async validateUserData(data: Prisma.UserCreateInput): Promise<void> {
+    try {
+      await userSchema.validateAsync(data, { abortEarly: false })
+    } catch (validationError) {
+      throw new UnprocessableEntityException(validationError.message)
+    }
+  }
+
+  private async checkIfEmailExists(email: string): Promise<void> {
+    const userEmail = await this.prisma.user.findFirst({
+      where: { email },
+      select: { email: true },
+    })
+
+    if (userEmail) {
+      throw new UnprocessableEntityException('Email already exists')
+    }
+  }
+
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
     try {
-      const userEmail = await this.prisma.user.findFirst({
-        where: { email: data.email },
-        select: { email: true },
-      })
+      await this.validateUserData(data)
 
-      if (userEmail) {
-        throw new UnprocessableEntityException('Email already exists')
-      }
+      await this.checkIfEmailExists(data.email)
 
       return this.prisma.user.create({
         data,
       })
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new UnprocessableEntityException(
-          'Error creating user: ' + err.message
-        )
-      }
-
-      throw new Error(err.message)
+      throw err
     }
   }
 }

@@ -35,19 +35,6 @@ describe('UserController', () => {
 
         expect(response).toEqual(result)
       })
-      it('should throw for invalid data', async () => {
-        const userData = {
-          name: '',
-          email: 'test@email.gov',
-          agency: 'ACRA',
-          description: 'I am a test officer',
-          acceptTerms: false,
-        }
-
-        await expect(controller.createUser(userData)).rejects.toThrow(
-          'name should be valid format'
-        )
-      })
     })
   })
 })
