@@ -60,7 +60,7 @@ export class UserService {
   }
   async getUsers(): Promise<User[]> {
     try {
-      return await this.prisma.user.findMany()
+      return (await this.prisma.user.findMany()) || []
     } catch (err) {
       throw err
     }

@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:21-alpine3.18
+FROM node:18-alpine
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -8,14 +8,20 @@ WORKDIR /usr/src/app
 COPY package.json .
 COPY package-lock.json .
 
+# Install app dependencies
 RUN npm install
-RUN npx prisma generate
-RUN npm run build
 
+# Copy the rest of the application code
 COPY . .
 
-EXPOSE 3000 
-# Note: No need to expose the port here since Docker Compose handles it in the docker-compose.yml file
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build the application
+RUN npm run build
+
+# Expose the application port (if needed)
+# EXPOSE 3000
 
 # Start the NestJS application
 CMD ["npm", "start"]
