@@ -58,4 +58,11 @@ export class UserService {
       throw err
     }
   }
+  async getUsers(): Promise<User[]> {
+    try {
+      return await this.prisma.user.findMany()
+    } catch (err) {
+      throw err
+    }
+  }
 }
