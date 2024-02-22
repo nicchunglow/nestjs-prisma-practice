@@ -4,6 +4,8 @@ up:
 down:
 	docker-compose down
 
-kill:
-	docker images prune -a
+prune:
 	docker container prune
+
+kill:
+	docker system prune -a
